@@ -29,30 +29,35 @@ public class MainService {
     }
 
     public RisksDTO processRisksFile(MultipartFile file) throws IOException, WrongFileFormatException, NoSheetFoundException {
+        utils.createDirIfNotExist(filepathDirectory);
         String path = utils.saveFile(file, "risks_");
         RisksExtractor risksExtractor = new RisksExtractor(path);
         return risksExtractor.extract();
     }
 
     public CostDTO processCostFile(MultipartFile file, String bd) throws IOException, WrongBDValueException, NoSheetFoundException {
+        utils.createDirIfNotExist(filepathDirectory);
         String path = utils.saveFile(file, "cost_");
         CostExtractor costExtractor = new CostExtractor(path, bd);
         return costExtractor.extract();
     }
 
     public ByteArrayResource getRiskFile(List<Risk> risks, String projectName) throws IOException, NoSheetFoundException {
+        utils.createDirIfNotExist(filepathDirectory);
         RisksFileGenerator generator = new RisksFileGenerator(filepathDirectory);
         String filepath = generator.generateXlsxFile(risks, projectName);
         return new ByteArrayResource(Files.readAllBytes(Paths.get(filepath)));
     }
 
     public ByteArrayResource getPlainXlsxFile(PlainXlsxDataDTO data) throws IOException {
+        utils.createDirIfNotExist(filepathDirectory);
         PlainXlsxCreator creator = new PlainXlsxCreator(filepathDirectory);
         String filepath = creator.createXlsxFromHeadersAndData(data.getHeader(), data.getData());
         return new ByteArrayResource(Files.readAllBytes(Paths.get(filepath)));
     }
 
     public ByteArrayResource getContribProjects(ContribProjectsDataDTO data) throws IOException {
+        utils.createDirIfNotExist(filepathDirectory);
         ContributingTableGenerator generator = new ContributingTableGenerator(filepathDirectory);
         String filepath = generator.generateContribTableXlsx(data);
         return new ByteArrayResource(Files.readAllBytes(Paths.get(filepath)));

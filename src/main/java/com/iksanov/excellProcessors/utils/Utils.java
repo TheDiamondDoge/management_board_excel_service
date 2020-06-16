@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,5 +30,14 @@ public class Utils {
     public String getFileFormat(String filename) {
         int lastDotIndex = filename.lastIndexOf('.');
         return filename.substring(lastDotIndex + 1);
+    }
+
+    public boolean createDirIfNotExist(String filepath) {
+        File dir = new File(filepath);
+        if (!dir.exists() || !dir.isDirectory()) {
+            return dir.mkdirs();
+        }
+
+        return false;
     }
 }
